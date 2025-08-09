@@ -1,0 +1,24 @@
+version: '3.4'
+services:
+  archive-downloader:
+    build: .
+    ports:
+      - "8080:8080"
+    command: >
+      sh -c "chmod -R 777 /app/files_storage && python server.py --host 0.0.0.0 --port 8080"
+    environment:
+      - STORAGE_DIRECTORY=test_photos
+      - CHUNK_SIZE_KB=512
+      - SLOWING_STATE=0
+      - SLOWING_TYME=3
+      - LOG_SHOW_STATE=1
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./files_storage:/app/files_storage
+      - ./test_photos:/app/test_photos
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
