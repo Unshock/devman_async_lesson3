@@ -1,21 +1,36 @@
+import argparse
 from aiohttp import web
-import aiofiles
 
+from archive_downloader.logger import setup_logger
+from archive_downloader.application import create_app
 
-async def archive(request):
-    raise NotImplementedError
+logger = setup_logger()
 
-
-async def handle_index_page(request):
-    async with aiofiles.open('index.html', mode='r') as index_file:
-        index_contents = await index_file.read()
-    return web.Response(text=index_contents, content_type='text/html')
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument(
+        '--host',
+        type=str,
+        help='host name',
+        required=False,
+        default='0.0.0.0',
+    )
+    parser.add_argument(
+        '-p',
+        '--port',
+        type=int,
+        help='port number',
+        required=False,
+        default=8080,
+    )
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
-    app = web.Application()
-    app.add_routes([
-        web.get('/', handle_index_page),
-        web.get('/archive/{archive_hash}/', archive),
-    ])
-    web.run_app(app)
+    args = parse_arguments()
+    host = args.host
+    port = args.port
+    logger.info(f'Starting the server with host={host}, port={port}')
+
+    app = create_app()
+    web.run_app(app, host=host, port=port)
