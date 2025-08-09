@@ -1,0 +1,6 @@
+.venv
+.idea
+files_storage
+test_archive_files
+
+__pycache__
