@@ -14,6 +14,7 @@ services:
       - LOG_SHOW_STATE=1
       - LOG_LEVEL=INFO
     volumes:
+      - ./files_storage:/app/files_storage
       - ./test_photos:/app/test_photos
     networks:
       - app-network
